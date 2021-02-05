@@ -1,0 +1,16 @@
+body {
+  background-color: #f1faee;
+}
+
+li {
+  color: blue;
+}
+
+.done {
+  color: grey;
+}
+
+#clear {
+  background-color: red;
+  color: white;
+}
