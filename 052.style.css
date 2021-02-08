@@ -1,0 +1,78 @@
+* {
+  font-family: "Varela Round", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #ef476f;
+}
+#container {
+  background-color: #0f46dd;
+  width: 600px;
+  margin: 220px auto;
+  text-align: center;
+}
+
+h2 {
+  background-color: #a8dadc;
+  font-size: 2em;
+  color: #1d3557;
+}
+
+h1 {
+  background-color: #f1faee;
+  font-size: 6em;
+  color: #1d3557;
+}
+
+#maximumHolder {
+  background-color: #90e0ef;
+  color: #1d3557;
+  padding: 10px;
+}
+
+select,
+label {
+  font-size: larger;
+}
+
+#buttonHolder {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  width: 200px;
+  height: 50px;
+  font-size: larger;
+  color: #f1faee;
+  border: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+#player1BTN {
+  background-color: #52b788;
+}
+
+#player1BTN:hover {
+  background-color: #95d5b2;
+  color: #293241;
+}
+#player2BTN {
+  background-color: #5390d9;
+}
+#player2BTN:hover {
+  background-color: #48bfe3;
+  color: #293241;
+}
+#reset {
+  background-color: #c81d25;
+}
+#reset:hover {
+  background-color: #ff5a5f;
+  color: #293241;
+}
