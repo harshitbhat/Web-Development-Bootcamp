@@ -192,7 +192,10 @@ nav {
   margin-left: auto;
   border: none;
   background: none;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  padding: 10px;
+  border: 1px solid #e52a5a;
+  border-radius: 20px;
   font-weight: 500;
   cursor: pointer;
 }
