@@ -7,7 +7,7 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1111,
   movementsDates: [
@@ -100,7 +100,7 @@ const displayMovements = function (movements, sort = false) {
             ${ind + 1}. ${type}
         </div>
         <div class="movements__value">
-            ${mov}
+            ${mov.toFixed(2)}€
         </div>
     </div>
     `;
@@ -130,7 +130,7 @@ createUsernames(accounts);
 /* -------------------------------------------------------------------------- */
 const calcDisplayBalance = (account) => {
   account.balance = account.movements.reduce((acc, curr) => acc + curr, 0);
-  labelBalance.textContent = `${account.balance}€`;
+  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -140,12 +140,12 @@ const calcDisplaySummary = (account) => {
   const incomes = account.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = incomes + '€';
+  labelSumIn.textContent = incomes.toFixed(2) + '€';
 
   const expenses = account.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + Math.abs(mov), 0);
-  labelSumOut.textContent = expenses + '€';
+  labelSumOut.textContent = expenses.toFixed(2) + '€';
 
   const interest = account.interestRate;
   const totalInterest = account.movements
@@ -153,7 +153,7 @@ const calcDisplaySummary = (account) => {
     .map((dep) => dep * (interest / 100))
     .filter((val) => val >= 1)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = totalInterest + '€';
+  labelSumInterest.textContent = totalInterest.toFixed(2) + '€';
 };
 
 /* -------------------------------------------------------------------------- */
@@ -173,6 +173,24 @@ const updateUI = (account) => {
 /*                               Event Handlers                               */
 /* -------------------------------------------------------------------------- */
 let currentAccount;
+
+/* -------------------------------------------------------------------------- */
+/*                            Fake Always Logged in                           */
+/* -------------------------------------------------------------------------- */
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 1;
+
+/* -------------------------------------------------------------------------- */
+/*                                    Date                                    */
+/* -------------------------------------------------------------------------- */
+
+const currentNow = new Date();
+const day = currentNow.getDate();
+const month = currentNow.getMonth() + 1;
+const year = currentNow.getFullYear();
+
+labelDate.textContent = currentNow;
 
 btnLogin.addEventListener('click', (e) => {
   e.preventDefault();
@@ -222,7 +240,7 @@ btnTransfer.addEventListener('click', (e) => {
 /* -------------------------------------------------------------------------- */
 btnLoan.addEventListener('click', (e) => {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
   inputLoanAmount.value = '';
   if (
     amount > 0 &&
@@ -855,3 +873,220 @@ const dogsSorted = [...dogs].sort(
 );
 
 console.log(dogsSorted);
+
+/* -------------------------------------------------------------------------- */
+/*                     12. Numbers, Dates, Intl and Timers                    */
+/* -------------------------------------------------------------------------- */
+
+console.log(23 === 23.0); // True
+// Base 10 -> 0-9
+// Base 2 -> 0-1
+console.log(0.1 + 0.2 === 0.3); // False
+
+console.log(0.1 + 0.2 - 0.3);
+
+/* -------------------------------------------------------------------------- */
+/*                       Converting and checking Numbers                      */
+/* -------------------------------------------------------------------------- */
+
+// Conversion
+
+console.log(Number('23'));
+
+console.log(+'43'); // Type coersion automatically to Numbers
+
+// Parsing
+console.log(Number.parseInt('$300')); // returns NaN
+console.log(Number.parseInt('300$', 10)); // returns 300 - 10 is the base - normal
+
+console.log(Number.parseFloat('2.5rem')); // Returns 2.5
+console.log(Number.parseInt('2.5rem')); // Returns 2
+
+// parseInt can also be called without Numbers - better to call it with numberes
+
+//isNAN - Check if value is NaN
+console.log(Number.isNaN(20));
+console.log(Number.isNaN('20'));
+console.log(Number.isNaN(Number('20X')));
+console.log(Number.isNaN(23 / 0)); // Return False
+console.log(23 / 0); // Returns Infinity
+
+// Checking is value is Number
+console.log(Number.isFinite(23 / 0)); // Gives False
+console.log(Number.isFinite('20')); // False as '20' is not a number
+
+// Or
+
+console.log(Number.isInteger(23));
+console.log(Number.isInteger(23.5));
+console.log(Number.isInteger(23.0));
+console.log(Number.isInteger('23'));
+console.log(Number.isInteger(23 / 0));
+
+/* -------------------------------------------------------------------------- */
+/*                              Math and Rounding                             */
+/* -------------------------------------------------------------------------- */
+
+console.log(Math.sqrt(25));
+console.log(36 ** (1 / 2));
+console.log(27 ** (1 / 3));
+
+// Array cannot be put into Math.max
+
+console.log(Math.max(2, 4, 8, 1, 0, 3, 6));
+console.log(Math.max(2, 4, 80, 1, 0, 3, '16'));
+console.log(Math.max(2, 4, '80', 1, 0, 3, '16'));
+console.log(Math.max(2, 4, '80px', 1, 0, 3, '16')); // NaN
+
+// Similarly Math.min
+
+console.log(Math.PI);
+
+console.log(Math.PI * Number.parseFloat('20px') ** 2); // Area of 20 px circle
+
+// Random Number b/w 1 and 6
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+const randomInt = (min, max) =>
+  Math.trunc(Math.random() * (max - min) + 1) + min;
+// 0 - 1 -> 0 - (max-min) -> min - max
+
+console.log(randomInt(20, 30));
+console.log(randomInt(20, 30));
+console.log(randomInt(20, 30));
+console.log(randomInt(20, 30));
+
+// Rounding Intergers
+console.log(Math.trunc(Math.PI)); // Removes decimal part
+console.log(Math.round(23.2)); // 23
+console.log(Math.round(23.5)); // 24
+console.log(Math.round(23.7)); // 24
+
+console.log(Math.ceil(24.1)); // 25
+console.log(Math.floor(24.9)); // 24
+
+console.log(Math.trunc(-23.2)); // -23
+console.log(Math.round(-23.2)); // -23
+console.log(Math.ceil(-23.2)); // -23
+console.log(Math.floor(-23.2)); // -24
+
+// Rounding Decimal
+
+console.log((2.7).toFixed(1)); // 2.7 return string
+console.log((2.7).toFixed(3)); // 2.700 return string
+console.log((2.3762).toFixed(3)); // 2.376 return string
+console.log((2.3768).toFixed(3)); // 2.377 return string
+
+/* -------------------------------------------------------------------------- */
+/*                             Remainder Operator                             */
+/* -------------------------------------------------------------------------- */
+
+console.log(5 % 2);
+
+console.log(8 / 3);
+console.log(8 % 3);
+
+const isEven = (n) => n % 2 === 0;
+
+console.log(isEven(98));
+console.log(isEven(99));
+
+labelWelcome.addEventListener('click', (e) => {
+  console.log('Clicking.....Welcome Label');
+  [...document.querySelectorAll('.movements__row')].forEach((row, i) => {
+    if (i % 2 === 0) {
+      row.style.backgroundColor = '#fdffb6';
+    }
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/*                                   BigInt                                   */
+/* -------------------------------------------------------------------------- */
+// Introduced in ES 2020
+
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER); // Better to use it 2 ^ 53 - 1
+console.log(2 ** 53);
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2); // Vague answers
+console.log(2 ** 53 + 3); // Vague answers
+
+// New Primitive BigInt introduced in ES 2020
+
+console.log(
+  7165879635487946238756287345678234658734650175091757016287456127845687146590743502346587n
+); // Adding n to the end => Big Int
+
+console.log(BigInt(1233));
+
+// Operations
+
+console.log(10000n + 10000n);
+
+console.log(
+  55786423582643589364587364573462579836457896234895623847568716n *
+    263154672135467124781326748162478623894628376487236487236487321648231648723164872364n
+);
+
+// Big ints can't be mised with usual numbers, have to use n at end
+
+const huge = 21847612837467812364729136872316872136478213647812364n;
+const toMul = 50000;
+
+console.log(huge * BigInt(toMul)); // console.log(huge * toMul); => Error
+
+console.log(20n == 20); // True
+console.log(20n === 20); // False
+console.log(typeof 20n); // bigint
+
+console.log(huge + ' is really big'); // Huge is converted to string
+
+// console.log(Math.sqrt(huge)); // Doesn't work
+
+console.log(10n / 3n); // Returns 3n (cuts the decimal part off, like trunc)
+
+/* -------------------------------------------------------------------------- */
+/*                                    Dates                                   */
+/* -------------------------------------------------------------------------- */
+
+// Create a Date
+const now = new Date();
+
+console.log(now);
+
+console.log(new Date('31 May, 1995'));
+console.log(new Date('October 16, 1999'));
+console.log(new Date('27 Aug,95'));
+
+console.log(new Date(account1.movementsDates[0]));
+
+console.log(new Date(2021, 2, 1, 12, 35, 0));
+
+// Beginning of unix time - Jan 1, 1970
+console.log(new Date(0));
+console.log(new Date(3 * 24 * 60 * 60 * 1000));
+
+console.log(new Date(259200000));
+
+// Working Dates
+
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+
+console.log(future.getFullYear()); // 2037
+console.log(future.getMonth()); // 10
+console.log(future.getDate()); // 19
+console.log(future.getDay()); // 4 -> Day of week (Thursday)
+console.log(future.getHours()); // 15
+console.log(future.getMinutes()); // 23
+console.log(future.getSeconds()); // 0
+console.log(future.toISOString()); // 2037-11-19T09:53:00.000Z
+console.log(future.getTime()); // 2142237180000
+
+console.log(new Date(2142237180900)); // Thu Nov 19 2037 15:23:00 GMT+0530 (India Standard Time)
+
+console.log(Date.now()); // Current Timestamp: 1614582833579
+
+future.setFullYear(2040);
+console.log(future);
